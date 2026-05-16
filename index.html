@@ -1,0 +1,2201 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Jessie Math捷析 - 認識扇形</title> 
+
+  <!-- ✅ 快取連結預覽（請放在 <head> 裡） -->
+  <meta name="description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+  
+  <!-- ✅ LINE / FB 預覽用 -->
+  <meta property="og:title" content="Jessie Math捷析 - 認識扇形">
+  <meta property="og:description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+  <meta property="og:type" content="website">
+  
+  <!-- ✅ 預覽圖片-->
+  <meta property="og:image" content="g5-u10.png">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1536">
+  <meta property="og:image:alt" content="Jessie Math 遊戲封面">
+  
+  <!-- ✅ 有些平台會參考 -->
+  <link rel="image_src" href="g5-u10.png">
+  
+  <!-- ✅ Twitter / X（可用同一張圖） -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jessie Math捷析 - 認識扇形">
+  <meta name="twitter:description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+  <meta name="twitter:image" content="g5-u10.png">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Fredoka:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --brand-primary:#2c3e50;
+      --brand-accent:#e67e22;
+      --brand-purple:#6c5ce7;
+      --icon-blue:#4285f4;
+      --bg-color:#f0f2f5;
+
+      --correct:#27ae60;
+      --wrong:#c0392b;
+
+      --line:#e5e7eb;
+      --shadow: 0 10px 26px rgba(2,8,23,.10);
+      --radius: 16px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{
+      margin:0; padding:0; width:100%; height: 100%;
+      font-family:'Noto Sans TC', sans-serif;
+      
+      /* 加入背景圖片設定 */
+      background-color: var(--bg-color);
+      background-image: url('jessie logo.jpg');
+      background-size: cover; /* 依比例縮小放大延伸涵蓋整個畫面 */
+      background-position: top left; /* 左上角對齊 */
+      background-repeat: no-repeat;
+      background-attachment: fixed; /* 滾動時背景固定 */
+
+      overflow-x:hidden;
+      user-select:none; /* 解決字體反藍 */
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    /* 手機橫屏強制鎖定 (僅限最大寬度 767px 以下的手機裝置) */
+    #orientation-lock {
+      display: none;
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--brand-primary); color: #fff;
+      flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; padding: 20px;
+    }
+    #orientation-lock i { font-size: 4rem; color: var(--brand-accent); margin-bottom: 20px; animation: spinPhone 2s infinite ease-in-out; }
+    @keyframes spinPhone { 0% { transform: rotate(0deg); } 50% { transform: rotate(-90deg); } 100% { transform: rotate(-90deg); } }
+    @media screen and (max-width: 767px) and (orientation: portrait) {
+      #orientation-lock { display: flex; }
+      #game-container, header, footer { display: none !important; }
+    }
+
+    header{
+      height:60px;
+      background:#fff;
+      padding:0 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      z-index:100;
+      border-bottom: 1px solid var(--line);
+      position:sticky;
+      top:0;
+    }
+    .brand-group{
+      display:flex; align-items:center; gap:10px;
+      text-decoration:none;
+      min-width: 140px;
+    }
+    .avatar-circle{
+      width:42px; height:42px;
+      border-radius:50%;
+      border:3px solid var(--brand-accent);
+      overflow:hidden;
+      display:flex; justify-content:center; align-items:center;
+      background:#fff; flex-shrink:0;
+    }
+    .avatar-circle img{ width:100%; height:100%; object-fit:cover; }
+    .brand-text{
+      font-family:'Fredoka', system-ui, sans-serif;
+      font-size:20px;
+      color: var(--brand-primary);
+      letter-spacing:.4px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .nav-group{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    .nav-btn{
+      text-decoration:none;
+      color:#5f6368;
+      background:#fff;
+      border:1px solid #dadce0;
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:900;
+      display:flex; align-items:center; gap:6px;
+      transition:.2s;
+      white-space:nowrap;
+    }
+    .nav-btn i{ color: var(--icon-blue); }
+    .nav-btn:hover{ background:#f8f9fa; transform: translateY(-1px); }
+
+    .nav-btn-purple{
+      color: var(--brand-purple);
+      border: 1.5px solid var(--brand-purple);
+      background:#f8f7ff;
+    }
+    .nav-btn-purple i{ color: var(--brand-purple); }
+    .nav-btn-purple:hover{ background: var(--brand-purple); color:#fff; }
+    .nav-btn-purple:hover i{ color:#fff; }
+
+    @media (max-width: 600px){
+      .brand-text{ display:none; }
+      .nav-btn{ padding:6px 9px; }
+      .nav-btn span{ font-size:12px; }
+    }
+
+    #game-container{
+      min-height: calc(100vh - 60px);
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      padding:10px; /* 縮小天地留白，節省空間 */
+      width:100%;
+    }
+    .game-box{
+      width:100%;
+      max-width: 920px;
+      background:rgba(255, 255, 255, 0.95); /* 稍微增加透明度讓背景隱約透出 */
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px 15px; /* 縮小內距，讓內容更緊湊 */
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* 將視圖改為相對位置，讓外框自適應高度，消除白邊 */
+    .screen-view {
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      width: 100%;
+    }
+    
+    /* 暫停選單維持覆蓋模式 */
+    .overlay-view {
+      position:absolute; inset:0;
+      background: rgba(255,255,255,0.98);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      z-index:160;
+      text-align:center;
+      padding:20px;
+      overflow-y: auto;
+    }
+
+    .hidden{ display:none !important; }
+
+    h1{
+      color: var(--brand-primary);
+      font-size: 2.0rem;
+      margin: 0 0 10px;
+      line-height:1.2;
+      font-weight:900;
+    }
+    p{ color:#666; font-size:1rem; margin: 0 0 16px; font-weight:800; }
+
+    input[type="text"]{
+      padding:10px;
+      font-size:1.15rem;
+      border:3px solid #ddd;
+      border-radius:999px;
+      text-align:center;
+      width: 80%;
+      max-width: 260px;
+      margin: 10px 0 16px;
+      font-weight:900;
+      color: var(--brand-primary);
+      outline:none;
+    }
+    input[type="text"]:focus{ border-color: var(--brand-accent); }
+
+    .btn{
+      background: var(--brand-accent);
+      color:#fff;
+      border:none;
+      padding:11px 18px;
+      font-size:1.05rem;
+      border-radius:999px;
+      cursor:pointer;
+      box-shadow: 0 4px 0 #d35400;
+      transition:.12s;
+      font-weight:900;
+      margin: 8px;
+      width: 100%;
+      max-width: 360px;
+      display:inline-flex; justify-content:center; align-items:center; gap:8px;
+      white-space:nowrap;
+    }
+    .btn:active{ transform: translateY(4px); box-shadow:none; }
+    .btn-blue{ background: var(--brand-primary); box-shadow: 0 4px 0 #1a252f; }
+    .btn-green{ background: var(--correct); box-shadow: 0 4px 0 #1e8449; }
+    .btn-ghost{
+      background:#fff;
+      color:#5f6368;
+      border: 2px solid #dadce0;
+      box-shadow:none;
+    }
+    .btn-ghost i{ color: var(--icon-blue); }
+    .btn-purple{
+      background: var(--brand-purple);
+      box-shadow: 0 4px 0 #4b3fd4;
+    }
+    .btn-danger{
+      background: var(--wrong);
+      box-shadow: 0 4px 0 #8e2c24;
+    }
+    /* 白板按鈕專屬色 */
+    .btn-teal{
+      background: #1abc9c;
+      box-shadow: 0 4px 0 #16a085;
+      color: white;
+    }
+
+    .level-grid{
+      width:100%;
+      max-width: 760px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      margin-top: 6px;
+    }
+    .level-btn{
+      width:100%;
+      max-width: none;
+      margin:0;
+      padding:12px 14px;
+      border-radius: 16px;
+      justify-content:space-between;
+      text-align:left;
+      line-height:1.2;
+      box-shadow: 0 6px 16px rgba(2,8,23,.08);
+    }
+    .level-left{
+      display:flex; flex-direction:column; gap:4px;
+      align-items:flex-start;
+    }
+    .level-title{
+      font-weight:900;
+      font-size:1.05rem;
+      letter-spacing:.2px;
+    }
+    .level-sub{
+      font-weight:800;
+      font-size:.88rem;
+      opacity:.92;
+    }
+    .level-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.28);
+      font-size:.86rem;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .level-btn.btn-blue .level-chip{ background: rgba(255,255,255,.12); }
+
+    /* 改為單排顯示 */
+    .diff-row{
+      display:flex; gap:10px; justify-content:space-between;
+      width: 100%; max-width: 760px;
+      margin-top: 12px;
+    }
+    .diff-row .btn{ margin:0; flex: 1; padding:10px 5px; font-size:1rem; white-space:nowrap; max-width: none;}
+
+    @media (max-width: 600px){
+      h1{ font-size: 1.65rem; }
+      p{ font-size: .98rem; }
+      .level-btn{ padding:11px 12px; border-radius:14px; }
+      .level-title{ font-size: 1.0rem; }
+      .level-sub{ font-size: .86rem; }
+    }
+
+    /* 首頁說明區塊樣式 */
+    .intro-box {
+      background: #f8f9fa;
+      border: 2px solid #eef2f7;
+      border-radius: 12px;
+      padding: 15px;
+      margin: 15px 0 20px 0;
+      text-align: left;
+      width: 100%;
+      max-width: 600px;
+    }
+    .intro-box p {
+      color: var(--brand-primary);
+      font-size: 1rem;
+      margin-bottom: 12px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+    .intro-box p:last-child { margin-bottom: 0; }
+    .intro-box span.desc { font-size: 0.95rem; color: #555; font-weight: 700; }
+
+    /* 遊戲主畫面排版 - 新增 */
+    .game-main-layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      width: 100%;
+      margin-bottom: 6px; /* 縮小以符合一頁顯示 */
+    }
+    .side-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .side-col.left-col {
+      min-width: 85px;
+    }
+    .side-col.right-col {
+      min-width: 85px;
+    }
+    .side-col .pill {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* 新增目前度數區塊樣式 */
+    .current-deg-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 5px; /* 縮小下距 */
+    }
+    .current-deg-label {
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: #666;
+    }
+    .current-deg-value {
+      font-weight: 900;
+      font-size: 1.6rem;
+      color: var(--brand-accent);
+    }
+
+    .hud-left{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1.5px solid #e8edf5;
+      background:#fff;
+      font-weight:900;
+      font-size:.92rem;
+      color: var(--brand-primary);
+      white-space:nowrap;
+    }
+    .pill i{ color: var(--icon-blue); }
+    .pill .num{
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size:1.05rem;
+      font-weight:900;
+    }
+    #time-disp{ color:#e74c3c; }
+    #score-disp{ color:#f1c40f; }
+    #combo-disp{ color: var(--brand-purple); }
+
+    .combo-box{
+      background: linear-gradient(135deg, #FF9966, #FF5E62);
+      color:#fff;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: .95rem;
+      opacity:0;
+      transform: scale(.85);
+      transition: .22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 6px 14px rgba(255, 94, 98, 0.25);
+      white-space:nowrap;
+      text-align: center;
+    }
+    .combo-active{ opacity:1; transform: scale(1); }
+
+    .pause-mini{
+      width:38px; height:38px;
+      border-radius:50%;
+      background:#fff;
+      border:2px solid #e8edf5;
+      color:#555;
+      font-size:1.05rem;
+      cursor:pointer;
+      display:flex; justify-content:center; align-items:center;
+      transition:.2s;
+      flex-shrink:0;
+    }
+    .pause-mini:hover{ background:#f3f6fb; color: var(--brand-primary); }
+
+    .urgent{ animation: pulse .55s infinite; }
+    @keyframes pulse{ 0%{opacity:1} 50%{opacity:.5} 100%{opacity:1} }
+
+    .question-card{
+      border: 2px solid #eef2f7;
+      border-radius: 16px;
+      padding: 8px 12px; /* 減小內距 */
+      margin-bottom: 6px; /* 減小外距 */
+      background: linear-gradient(180deg, #ffffff 0%, rgba(108,92,231,.04) 100%);
+    }
+    .q-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    /* 修改標籤區塊使其更緊湊 */
+    .chips{ display:flex; gap:5px; flex-wrap:wrap; }
+    .chip{
+      display:inline-flex; align-items:center; gap:4px;
+      padding:4px 8px;
+      border-radius:999px;
+      border: 2px solid #eef2f7;
+      background:#fff;
+      font-weight:900;
+      color: var(--brand-primary);
+      font-size: .78rem;
+      white-space:nowrap;
+    }
+    .chip.purple{ border-color: rgba(108,92,231,.28); background: rgba(108,92,231,.06); color: var(--brand-purple); }
+    .chip.accent{ border-color: rgba(230,126,34,.28); background: rgba(230,126,34,.06); color: var(--brand-accent); }
+    .chip.blue{ border-color: rgba(66,133,244,.28); background: rgba(66,133,244,.06); color: var(--icon-blue); }
+
+    .q-title{
+      font-size: 1.18rem;
+      font-weight: 900;
+      color: var(--brand-primary);
+      line-height:1.35;
+      margin: 0 0 2px;
+      text-align:left;
+    }
+    .q-objective{
+      font-size: 1.03rem;
+      font-weight: 900;
+      color: var(--brand-primary);
+      line-height: 1.45;
+      text-align:left;
+      margin:0;
+    }
+    .q-objective .hi{
+      color:#d81b60;
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+    }
+
+    /* 白板區與畫布整合 */
+    .canvas-wrap{
+      position: relative;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding: 4px; /* 減小留白 */
+      border-radius: 16px;
+      background:#fff;
+      border: 2px solid #eef2f7;
+      flex: 1; /* 取消原本的 margin-bottom，讓它自動填滿中間 */
+      max-width: 760px;
+    }
+    canvas{
+      max-width: 100%; /* 避免超出視窗寬度 */
+      max-height: calc(100vh - 210px); /* ★核心修正★：動態限制畫布最大高度，確保所有元素都能呈現在一頁 */
+      width: auto;
+      height:auto;
+      border-radius: 14px;
+      background: transparent;
+      touch-action:none;
+      display: block;
+    }
+    #stage {
+      border: 2px solid #eef2f7;
+      box-shadow: 0 10px 22px rgba(0,0,0,.10);
+      background:#fff;
+    }
+    #whiteboard {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none; 
+      z-index: 10;
+    }
+    #whiteboard.active {
+      pointer-events: auto; 
+      cursor: crosshair;
+      background: rgba(255,255,255,0.1); 
+    }
+
+    /* 將五個按鈕變成一排並縮小 */
+    .action-row {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 6px;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 6px; /* 縮小空間 */
+    }
+    .action-row .btn {
+      margin: 0;
+      flex: 1;
+      padding: 10px 4px;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      max-width: none;
+      min-width: 0; /* 防止文字溢出撐破容器 */
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 600px){
+      #game-container { padding: 5px; } /* 更極致地節省行動版空間 */
+      .game-box { padding: 8px; }
+      .pill{ padding:5px 9px; font-size:.86rem; }
+      .pill .num{ font-size:1.0rem; }
+      .combo-box{ padding:6px 10px; font-size:.9rem; }
+      .game-main-layout { gap: 8px; margin-bottom: 5px; }
+      .side-col { gap: 8px; }
+      .current-deg-label { font-size: 0.95rem; }
+      .current-deg-value { font-size: 1.35rem; }
+      .current-deg-wrap { margin-bottom: 5px; }
+      .question-card{ padding: 6px 8px; margin-bottom: 5px; }
+      .canvas-wrap{ padding: 2px; }
+      .action-row .btn { font-size: 0.8rem; padding: 8px 2px; }
+      .action-row .btn i { display: none; }
+    }
+
+    /* 排行榜樣式更新 */
+    .rank-wrap{
+      width:100%;
+      max-width: 100%;
+      margin-top: 10px;
+      text-align:left;
+    }
+    .rank-title{
+      color: var(--brand-accent);
+      margin: 0 0 6px;
+      font-weight:900;
+    }
+    .rank-table-wrap {
+      width:100%;
+      border:2px solid #eef2f7;
+      border-radius: 12px;
+      overflow-y:auto;
+      max-height: 200px;
+      background:#fafafa;
+    }
+    table.rank-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--brand-primary);
+      text-align: center;
+      min-width: 500px; 
+    }
+    table.rank-table th {
+      background: #f1f5f9;
+      padding: 8px;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    table.rank-table td {
+      padding: 8px;
+      border-bottom: 1px solid #eef2f7;
+    }
+    table.rank-table tr:last-child td { border-bottom: none; }
+    .medal-1 { color: #f1c40f; font-size: 1.1rem; }
+    .medal-2 { color: #95a5a6; font-size: 1.1rem; }
+    .medal-3 { color: #d35400; font-size: 1.1rem; }
+    .medal-4 { color: #34495e; font-size: 1.1rem; }
+
+    /* 賽後復盤區 */
+    .review-wrap {
+      width: 100%;
+      background: #f8f9fa;
+      border: 2px solid #eef2f7;
+      border-radius: 12px;
+      margin-top: 15px;
+      padding: 10px;
+      text-align: left;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    .review-stats-bar {
+      display: flex; justify-content: space-around;
+      background: #fff; padding: 10px; border-radius: 8px; margin-bottom: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      font-weight: 900;
+    }
+    .r-correct { color: var(--correct); }
+    .r-wrong { color: var(--wrong); }
+    .review-item {
+      padding: 8px; border-bottom: 1px dashed #ccc;
+      font-size: 0.9rem; font-weight: 800; color: #555;
+    }
+    .review-item:last-child { border-bottom: none; }
+    .review-item span.hi { color: #d81b60; }
+
+    /* 捷析老師彈出動畫 - 改為 Fixed 固定在視窗兩側邊緣 */
+    .teacher-popup {
+      position: fixed; /* 從 absolute 改為 fixed，讓它依賴整個瀏覽器視窗定位 */
+      bottom: -350px; 
+      z-index: 9999; /* 提高層級，確保永遠顯示在最上層 */
+      transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+    }
+    .teacher-popup.show {
+      bottom: 20px;
+    }
+    .teacher-popup.left-side { left: 30px; right: auto; }
+    .teacher-popup.right-side { right: 30px; left: auto; }
+    
+    .teacher-popup img {
+      width: auto;
+      max-width: 250px; 
+      height: 200px;
+      object-fit: contain;
+    }
+    .teacher-bubble {
+      background: #fff;
+      border: 3px solid var(--brand-accent);
+      padding: 10px 15px;
+      border-radius: 20px;
+      font-weight: 900;
+      color: var(--brand-primary);
+      margin-bottom: 10px;
+      position: relative;
+      font-size: 1.1rem;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .teacher-bubble::after {
+      content: ''; position: absolute;
+      bottom: -10px; left: 50%; transform: translateX(-50%);
+      border-width: 10px 10px 0;
+      border-style: solid;
+      border-color: var(--brand-accent) transparent transparent transparent;
+    }
+    @media (max-width: 600px){
+      .teacher-popup img { height: 150px; max-width: 180px;}
+      .teacher-bubble { font-size: 0.9rem; white-space: normal;}
+    }
+
+    footer{
+      width:100%;
+      display:flex;
+      justify-content:center;
+      padding: 12px 10px 18px;
+    }
+    .footer-pill{
+      width:100%;
+      max-width: 920px;
+      background: rgba(255,255,255,.92);
+      border: 2px solid #eef2f7;
+      border-radius: 999px;
+      box-shadow: 0 10px 22px rgba(2,8,23,.08);
+      padding: 10px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .footer-left, .footer-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 260px;
+      flex: 1;
+    }
+    .footer-dot{
+      width:10px; height:10px;
+      border-radius:50%;
+      background: var(--brand-accent);
+      box-shadow: 0 0 0 6px rgba(230,126,34,.15);
+      flex-shrink:0;
+    }
+    .footer-copy{
+      font-weight:900;
+      color:#475569;
+      font-size:.92rem;
+      line-height:1.2;
+      word-break:break-word;
+    }
+    .footer-icon{
+      width:30px; height:30px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(108,92,231,.10);
+      border: 1.5px solid rgba(108,92,231,.22);
+      color: var(--brand-purple);
+      flex-shrink:0;
+    }
+    .footer-tagline{
+      font-weight:900;
+      color: var(--brand-primary);
+      font-size:.98rem;
+      line-height:1.2;
+    }
+    @media (max-width: 600px){
+      .footer-pill{ border-radius: 18px; }
+      .footer-left, .footer-right{ min-width: 100%; justify-content:center; }
+      .footer-copy, .footer-tagline{ text-align:center; }
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="orientation-lock">
+    <i class="fa-solid fa-mobile-screen-button"></i>
+    <h2>請將裝置旋轉至「橫向」</h2>
+    <p>為了給您最佳的畫圖與計算體驗，本遊戲在手機尺寸上僅支援橫向遊玩喔！</p>
+  </div>
+
+  <header>
+    <a href="https://jessiemath0703-chu.github.io/website2/" class="brand-group">
+      <div class="avatar-circle">
+        <img src="JESSIEMATH-Q.png" alt="J" onerror="this.src='https://ui-avatars.com/api/?name=JM&background=e67e22&color=fff'">
+      </div>
+      <span class="brand-text">Jessie Math捷析</span>
+    </a>
+
+    <div class="nav-group">
+      <a href="https://jessiemath0703-chu.github.io/website2/" class="nav-btn">
+        <i class="fa-solid fa-house"></i> <span>首頁</span>
+      </a>
+      <a href="https://jessiemath0703-chu.github.io/Game-Lobby/" class="nav-btn">
+        <i class="fa-solid fa-gamepad"></i> <span>遊戲大廳</span>
+      </a>
+      <a href="https://jessiemath0703-chu.github.io/Game-Lobby/#g5-u10" class="nav-btn nav-btn-purple">
+        <i class="fa-solid fa-undo"></i> <span>G5扇形</span>
+      </a>
+    </div>
+  </header>
+
+  <div id="teacher-popup" class="teacher-popup left-side">
+    <div class="teacher-bubble" id="teacher-bubble-text">太棒了！</div>
+    <img id="teacher-img" src="jessie.png" alt="捷析老師">
+  </div>
+
+  <div id="game-container">
+    <div class="game-box">
+
+      <div id="screen-start" class="screen-view">
+        <div style="font-size:3.6rem; margin-bottom:10px;">🍕</div>
+        <h1>扇形三關整合</h1>
+        <p>先報上名來，等一下讓圓心角替你發光。</p>
+
+        <div class="intro-box">
+          <p><i class="fa-solid fa-circle-exclamation" style="color:var(--brand-accent);"></i> <b>強制說明：</b><br>
+             <span class="desc">本遊戲在手機上僅支援橫向遊玩。請確保已開啟「螢幕旋轉」，並將手機轉為橫向以獲得最佳體驗。</span>
+          </p>
+          <p><i class="fa-solid fa-gamepad" style="color:var(--brand-purple);"></i> <b>遊戲說明：</b><br>
+             <span class="desc">拖曳圓上的控制點，切出題目指定的扇形或角度。共有三種關卡與三種難度，挑戰你的比例感與精準度！</span>
+          </p>
+        </div>
+
+        <input type="text" id="player-name" placeholder="請輸入名字" maxlength="12">
+        <button class="btn" id="btn-next" type="button">下一步 <i class="fa-solid fa-arrow-right"></i></button>
+
+        <div class="rank-wrap">
+          <p class="rank-title"><i class="fa-solid fa-trophy"></i> 榮譽榜（Top 10）</p>
+          <div class="rank-table-wrap"><div id="rank-content-start"></div></div>
+        </div>
+      </div>
+
+      <div id="screen-select" class="screen-view hidden">
+        <h1>選擇關卡</h1>
+        <p>嗨，<span id="display-name" style="color:var(--brand-accent); font-weight:900;"></span>！挑一個宇宙入口。</p>
+
+        <div class="level-grid">
+          <button class="btn level-btn" data-level="1" type="button">
+            <div class="level-left">
+              <div class="level-title">Lv 1｜10-1 認識扇形</div>
+              <div class="level-sub">切出大小扇形／畫出指定角度</div>
+            </div>
+            <span class="level-chip"><i class="fa-solid fa-chart-pie"></i> 直覺練功</span>
+          </button>
+
+          <button class="btn level-btn" data-level="2" type="button">
+            <div class="level-left">
+              <div class="level-title">Lv 2｜10-2 認識圓心角</div>
+              <div class="level-sub">命中範圍／補角任務／量角器測量</div>
+            </div>
+            <span class="level-chip"><i class="fa-solid fa-compass-drafting"></i> 精準鎖定</span>
+          </button>
+
+          <button class="btn btn-blue level-btn" data-level="3" type="button">
+            <div class="level-left">
+              <div class="level-title">Lv 3｜10-3 幾分之幾圓</div>
+              <div class="level-sub">比例拖曳／看圖算分數／分數轉角度</div>
+            </div>
+            <span class="level-chip"><i class="fa-solid fa-wand-magic-sparkles"></i> 比例覺醒</span>
+          </button>
+        </div>
+
+        <div class="diff-row">
+          <button class="btn btn-ghost" data-diff="easy" type="button"><i class="fa-solid fa-feather"></i> 輕鬆</button>
+          <button class="btn btn-ghost" data-diff="normal" type="button"><i class="fa-solid fa-bolt"></i> 標準</button>
+          <button class="btn btn-ghost" data-diff="hard" type="button"><i class="fa-solid fa-fire"></i> 燃燒</button>
+        </div>
+
+        <p id="diff-desc" style="margin-top:12px; max-width:720px;">
+          目前：<b style="color:var(--brand-purple)">輕鬆</b>｜時間 <b>90秒</b>｜容錯 <b>±6°</b>｜角度吸附約 <b>2°</b> 一格。
+        </p>
+
+        <button class="btn btn-green" id="btn-start" type="button">
+          開始本局（90 秒） <i class="fa-solid fa-play"></i>
+        </button>
+      </div>
+
+      <div id="screen-end" class="screen-view hidden">
+        <h1>時間到！🔔</h1>
+        <p>最終分數：<span id="final-score" style="font-size:2.5rem; color:var(--brand-accent); font-weight:900;">0</span></p>
+        <p style="margin-top:-6px;">
+          星等：<span id="final-stars" class="startext" style="font-size:1.4rem; font-weight:900;">☆☆☆</span>
+        </p>
+
+        <div class="review-wrap" id="review-container">
+          <div class="review-stats-bar">
+            <div>此次成績：<span id="review-score"></span></div>
+            <div class="r-correct">答對：<span id="review-correct"></span> / <span id="review-total1"></span></div>
+            <div class="r-wrong">答錯：<span id="review-wrong"></span> / <span id="review-total2"></span></div>
+          </div>
+          <div id="review-list"></div>
+        </div>
+
+        <div class="rank-wrap">
+          <p class="rank-title"><i class="fa-solid fa-ranking-star"></i> 本關排行榜（Top 10）</p>
+          <div class="rank-table-wrap"><div id="rank-content"></div></div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px; width:100%; align-items:center; margin-top:10px;">
+          <button class="btn" id="btn-play-again" type="button"><i class="fa-solid fa-rotate-right"></i> 再玩一次</button>
+          <button class="btn btn-blue" id="btn-back2" type="button"><i class="fa-solid fa-list"></i> 回選擇關卡</button>
+        </div>
+      </div>
+
+      <div id="game-ui" class="hidden">
+        
+        <div class="question-card">
+          <div class="q-top">
+            <div>
+              <div class="q-title" id="q-title">題目載入中…</div>
+              <p class="q-objective hidden" id="q-objective" style="display:none;"></p>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
+              <div class="chips">
+                <span class="chip blue" id="chip-level"><i class="fa-solid fa-layer-group"></i> Lv 1</span>
+                <span class="chip purple" id="chip-diff"><i class="fa-solid fa-gauge-high"></i> 輕鬆</span>
+                <span class="chip accent" id="chip-rule"><i class="fa-solid fa-clock"></i> 對＋5 秒｜錯－5 秒</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="game-main-layout">
+          <div class="side-col left-col">
+            <div id="current-deg-display" class="current-deg-wrap hidden">
+              <div class="current-deg-label">目前</div>
+              <div class="current-deg-value" id="current-deg-val">0°</div>
+            </div>
+            <button class="pause-mini hidden" id="btn-pause" type="button" title="暫停 / 繼續">
+              <i class="fa-solid fa-pause"></i>
+            </button>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="stage" width="760" height="600" aria-label="扇形互動畫布"></canvas>
+            <canvas id="whiteboard" width="760" height="600" aria-label="透明計算紙"></canvas>
+          </div>
+
+          <div class="side-col right-col">
+            <div class="pill"><i class="fa-solid fa-hourglass-half"></i> <span class="num" id="time-disp">60</span></div>
+            <div class="pill"><i class="fa-solid fa-star"></i> <span class="num" id="score-disp">0</span></div>
+            <div class="pill"><i class="fa-solid fa-fire"></i> <span class="num" id="combo-disp">0</span></div>
+            <div id="combo-box" class="combo-box">COMBO x3</div>
+
+            <div id="input-zone" class="hidden" style="display:flex; flex-direction:column; justify-content:center; align-items:center; gap:8px; margin-top: 10px; padding: 10px; background: #f8f9fa; border: 2px dashed #cbd5e1; border-radius: 12px; width: 100%;">
+              <span style="font-weight:900; color:var(--brand-primary); font-size:1.05rem; text-align:center;">輸入答案：</span>
+              
+              <div id="input-deg-wrap" class="hidden" style="display:flex; align-items:center; gap:5px;">
+                <input type="number" id="input-deg" style="width:70px; text-align:center; font-size:1.2rem; font-weight:900; border: 3px solid #ddd; border-radius: 10px; padding: 6px; outline:none;" onfocus="this.style.borderColor='var(--brand-accent)'" onblur="this.style.borderColor='#ddd'">
+                <span style="font-weight:900; font-size:1.3rem; color:var(--brand-primary);">°</span>
+              </div>
+
+              <div id="input-frac-wrap" class="hidden" style="display:flex; align-items:flex-end; gap:5px;">
+                <div style="display:flex; flex-direction:column; align-items:center; gap:4px; width: 60px;">
+                  <input type="number" id="input-frac-p" style="width:100%; text-align:center; font-size:1.15rem; font-weight:900; border: 3px solid #ddd; border-radius: 8px; padding: 4px 2px; outline:none;" onfocus="this.style.borderColor='var(--brand-accent)'" onblur="this.style.borderColor='#ddd'">
+                  <div style="width: 100%; height: 4px; background-color: var(--brand-primary); border-radius: 2px;"></div>
+                  <input type="number" id="input-frac-q" style="width:100%; text-align:center; font-size:1.15rem; font-weight:900; border: 3px solid #ddd; border-radius: 8px; padding: 4px 2px; outline:none;" onfocus="this.style.borderColor='var(--brand-accent)'" onblur="this.style.borderColor='#ddd'">
+                </div>
+                <span style="font-weight:900; color:var(--brand-primary); font-size:1.1rem; padding-bottom: 2px;">圓</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="action-row" id="action-row">
+          <button class="btn btn-teal" id="btn-toggle-wb" type="button"><i class="fa-solid fa-pen"></i> 開啟計算紙</button>
+          <button class="btn btn-ghost" id="btn-clear-wb" type="button"><i class="fa-solid fa-eraser"></i> 清除白板</button>
+          <button class="btn btn-danger" id="btn-restart-inline" type="button"><i class="fa-solid fa-rotate-right"></i> 重新本關</button>
+          <button class="btn btn-ghost" id="btn-back-inline" type="button"><i class="fa-solid fa-list"></i> 回關卡選單</button>
+          <button class="btn btn-purple" id="btn-submit" type="button"><i class="fa-solid fa-bolt"></i> 送出判定</button>
+        </div>
+
+      </div>
+
+      <div id="screen-pause" class="overlay-view hidden">
+        <h1>暫停中 ⏸️</h1>
+        <p>圓先別轉，我們先呼吸一下。</p>
+        <button class="btn btn-green" id="btn-resume" type="button">繼續遊戲</button>
+        <button class="btn" id="btn-restart-pause" type="button">重新本關（分數歸零）</button>
+        <button class="btn btn-blue" id="btn-back-pause" type="button">回關卡選單</button>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-pill">
+      <div class="footer-left">
+        <div class="footer-dot" aria-hidden="true"></div>
+        <div class="footer-copy">© 2025–2026 Jessie Math 捷析老師. All rights reserved.</div>
+      </div>
+      <div class="footer-right">
+        <div class="footer-icon" aria-hidden="true"><i class="fas fa-compass"></i></div>
+        <div class="footer-tagline">數學不迷路，捷析Jessie 帶你走向理解。</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  (() => {
+    window.addEventListener('error', (e) => console.warn('JS Error:', e.message));
+
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+
+    const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+    const rad2deg = r => (r * 180 / Math.PI);
+    const deg2rad = d => (d * Math.PI / 180);
+    const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+    const nowLocalTime = () => {
+      const d = new Date();
+      return `${d.getFullYear()}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getDate().toString().padStart(2,'0')} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+    };
+
+    const norm = a => {
+      a = a % (Math.PI*2);
+      if(a < 0) a += Math.PI*2;
+      return a;
+    };
+    const sweepCCW = (a1,a2) => {
+      a1 = norm(a1); a2 = norm(a2);
+      let s = a2 - a1;
+      if(s < 0) s += Math.PI*2;
+      return s;
+    };
+
+    // UI Elements
+    const screenStart = $('#screen-start');
+    const screenSelect = $('#screen-select');
+    const screenPause = $('#screen-pause');
+    const screenEnd = $('#screen-end');
+    const gameUI = $('#game-ui');
+
+    const playerNameInput = $('#player-name');
+    const btnNext = $('#btn-next');
+    const displayName = $('#display-name');
+
+    const btnStart = $('#btn-start');
+    const btnPause = $('#btn-pause');
+    const btnResume = $('#btn-resume');
+    const btnRestartPause = $('#btn-restart-pause');
+    const btnBackPause = $('#btn-back-pause');
+    const btnPlayAgain = $('#btn-play-again');
+    const btnBack2 = $('#btn-back2');
+
+    const timeDisp = $('#time-disp');
+    const scoreDisp = $('#score-disp');
+    const comboDisp = $('#combo-disp');
+    const comboBox = $('#combo-box');
+
+    const qTitle = $('#q-title');
+    const qObjective = $('#q-objective');
+    const chipLevel = $('#chip-level');
+    const chipDiff = $('#chip-diff');
+    const diffDesc = $('#diff-desc');
+
+    const btnSubmit = $('#btn-submit');
+    const btnToggleWb = $('#btn-toggle-wb');
+    const btnClearWb = $('#btn-clear-wb');
+    const btnRestartInline = $('#btn-restart-inline');
+    const btnBackInline = $('#btn-back-inline');
+
+    const finalScore = $('#final-score');
+    const finalStars = $('#final-stars');
+
+    const rankStart = $('#rank-content-start');
+    const rankEnd = $('#rank-content');
+
+    const canvas = $('#stage');
+    const ctx = canvas.getContext('2d');
+    
+    const wbCanvas = $('#whiteboard');
+    const wbCtx = wbCanvas.getContext('2d');
+    let isDrawing = false;
+    let wbActive = false;
+    let lastX = 0, lastY = 0;
+
+    const STORE_KEY = 'JM_SECTOR_GAME_FRAME_V4_ADVANCED';
+
+    const levelMeta = {
+      1: { name:"Lv 1", desc:"10-1 認識扇形" },
+      2: { name:"Lv 2", desc:"10-2 認識圓心角" },
+      3: { name:"Lv 3", desc:"10-3 幾分之幾圓" },
+    };
+
+    const diffMeta = {
+      easy:   { name:"輕鬆", tol:6, snap:2, scoreBase:10, time: 90 },
+      normal: { name:"標準", tol:3, snap:1, scoreBase:12, time: 60 },
+      hard:   { name:"燃燒", tol:1, snap:1, scoreBase:14, time: 45 },
+    };
+
+    const commonAngles = [10,12,15,18,20,24,25,30,35,36,40,45,50,54,60,70,72,75,80,84,90,96,100,105,108,110,120,125,135,144,150,160,165,168,170,180,192,200,210,216,225,240,252,270,288,300,315,330,336,340,345,350];
+    const fracPool = [[1,2],[1,3],[2,3],[1,4],[3,4],[1,5],[2,5],[3,5],[4,5],[1,6],[5,6],[1,8],[3,8],[5,8],[7,8],[1,9],[2,9],[4,9],[5,9],[7,9],[8,9],[1,10],[3,10],[7,10],[9,10],[1,12],[5,12],[7,12],[11,12]];
+    
+    let roundHistoryLog = new Set();
+
+    let playerName = '';
+    let currentLevel = 1;
+    let currentDiff = 'easy';
+
+    let running = false;
+    let paused = false;
+    let timeLeft = 90;
+    let score = 0;
+    let combo = 0;
+    let tickTimer = null;
+    
+    let roundTotalQ = 0;
+    let roundCorrectQ = 0;
+    let roundHistory = [];
+
+    const W = canvas.width, H = canvas.height;
+    const cx = W*0.5, cy = H*0.5;
+    const R = Math.min(W,H)*0.38;
+
+    let a1 = deg2rad(20);
+    let a2 = deg2rad(120);
+    let dragging = null;
+    let q = null; 
+
+    let protractorAngle = Math.PI; 
+    let dragStartAngle = 0;
+    let dragStartProtractorAngle = 0;
+
+    function loadStore(){
+      try{
+        const raw = localStorage.getItem(STORE_KEY);
+        if(!raw) return { boards:[] };
+        return JSON.parse(raw) || { boards:[] };
+      }catch(e){ return { boards:[] }; }
+    }
+    function saveStore(obj){ localStorage.setItem(STORE_KEY, JSON.stringify(obj)); }
+    function pushBoard(entry){
+      const st = loadStore();
+      st.boards.push(entry);
+      st.boards.sort((a,b)=> {
+          if (b.score !== a.score) return b.score - a.score;
+          if (b.correct !== a.correct) return b.correct - a.correct;
+          return 0; 
+      });
+      st.boards = st.boards.slice(0,10);
+      saveStore(st);
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+    }
+
+    function renderBoard(container){
+      const st = loadStore();
+      const arr = st.boards;
+      container.innerHTML = '';
+      if(arr.length === 0){
+        container.innerHTML = `<div style="padding:15px; text-align:center; color:#94a3b8; font-weight:900;">暫無紀錄（第一名在等你）</div>`;
+        return;
+      }
+      
+      let html = `<table class="rank-table">
+        <thead>
+          <tr>
+            <th>名次</th><th>玩家</th><th>關卡</th><th>難度</th><th>分數 (對/總)</th><th>日期時間</th>
+          </tr>
+        </thead>
+        <tbody>`;
+      
+      arr.forEach((it, i) => {
+        let medal = `${i+1}`;
+        if(i===0) medal = `<span class="medal-1">🥇 第一名</span>`;
+        else if(i===1) medal = `<span class="medal-2">🥈 第二名</span>`;
+        else if(i===2) medal = `<span class="medal-3">🥉 第三名</span>`;
+        else medal = `<span class="medal-4">🎖️ 第 ${i+1} 名</span>`;
+        
+        const ctText = it.total ? `(${it.correct}/${it.total})` : '';
+
+        html += `<tr>
+          <td>${medal}</td>
+          <td>${escapeHtml(it.name)}</td>
+          <td>${it.levelName}</td>
+          <td>${it.diffName}</td>
+          <td style="color:var(--brand-accent)">${it.score} ${ctText}</td>
+          <td style="font-size:0.8rem; color:#888;">${it.date}</td>
+        </tr>`;
+      });
+      html += `</tbody></table>`;
+      container.innerHTML = html;
+    }
+
+    function starFor(level, diff, score){
+      const base = level === 1 ? 160 : level === 2 ? 190 : 210;
+      const dMul = diff === 'easy' ? 0.9 : diff === 'normal' ? 1.0 : 1.1;
+      const t1 = Math.round(base * dMul);
+      const t2 = Math.round(base * 1.35 * dMul);
+      const t3 = Math.round(base * 1.75 * dMul);
+      if(score >= t3) return 3;
+      if(score >= t2) return 2;
+      if(score >= t1) return 1;
+      return 0;
+    }
+
+    function polarToXY(angle){ return { x: cx + Math.cos(angle)*R, y: cy + Math.sin(angle)*R }; }
+    function currentSweepDeg(){ return rad2deg(sweepCCW(a1,a2)); }
+
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0,0,W,H);
+
+      // 背景淡色圓
+      ctx.beginPath();
+      ctx.arc(cx,cy,R+14,0,Math.PI*2);
+      ctx.fillStyle = "rgba(44,62,80,.04)";
+      ctx.fill();
+
+      const isInput = q && q.type === 'input';
+
+      if (q && q.mode === 'measure') {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(protractorAngle);
+
+          const targetR = R + 65; 
+          
+          ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+          ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
+          ctx.lineWidth = 2;
+
+          ctx.beginPath();
+          ctx.arc(0, 0, targetR, 0, Math.PI, false);
+          ctx.lineTo(-targetR, 0);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          const innerR = targetR * 0.15;
+          ctx.beginPath();
+          ctx.arc(0, 0, innerR, 0, Math.PI, false);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(-targetR, 0);
+          ctx.lineTo(targetR, 0);
+          ctx.moveTo(0, 0);
+          ctx.lineTo(0, innerR);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(0, 0, 4, 0, Math.PI*2);
+          ctx.fillStyle = "rgba(230,126,34,1)";
+          ctx.fill();
+
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+
+          for (let i = 0; i <= 180; i++) {
+              const angle = i * Math.PI / 180;
+              const cosA = Math.cos(angle);
+              const sinA = Math.sin(angle);
+
+              let tickLen = targetR * 0.03;
+              if (i % 5 === 0) tickLen = targetR * 0.06;
+              if (i % 10 === 0) tickLen = targetR * 0.1;
+
+              const outerX = targetR * cosA;
+              const outerY = targetR * sinA;
+              const innerX = (targetR - tickLen) * cosA;
+              const innerY = (targetR - tickLen) * sinA;
+
+              ctx.beginPath();
+              ctx.moveTo(outerX, outerY);
+              ctx.lineTo(innerX, innerY);
+              ctx.lineWidth = (i % 10 === 0) ? 1.5 : (i % 5 === 0 ? 1 : 0.4);
+              ctx.strokeStyle = (i % 10 === 0) ? "#000" : "#333";
+              ctx.stroke();
+
+              if (i % 10 === 0) {
+                  const textR1 = targetR - tickLen - 18; 
+                  const textR2 = targetR - tickLen - 42; 
+
+                  ctx.save();
+                  ctx.translate(textR1 * cosA, textR1 * sinA);
+                  ctx.rotate(angle - Math.PI/2);
+                  ctx.fillStyle = "#000";
+                  ctx.font = "900 22px 'Fredoka', sans-serif";
+                  ctx.fillText(i, 0, 0);
+                  ctx.restore();
+
+                  ctx.save();
+                  ctx.translate(textR2 * cosA, textR2 * sinA);
+                  ctx.rotate(angle - Math.PI/2);
+                  ctx.fillStyle = "#c0392b";
+                  ctx.font = "900 18px 'Fredoka', sans-serif";
+                  ctx.fillText(180 - i, 0, 0);
+                  ctx.restore();
+              }
+          }
+          ctx.restore();
+      }
+
+      if (q && q.mode === 'slice') {
+        const startAngle = -Math.PI / 2;
+        for (let i = 0; i < q.q; i++) {
+            const ang1 = startAngle + (i * 2 * Math.PI) / q.q;
+            const ang2 = startAngle + ((i + 1) * 2 * Math.PI) / q.q;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, R, ang1, ang2);
+            ctx.closePath();
+            
+            if (i < q.p) {
+                const grad = ctx.createRadialGradient(cx,cy,0,cx,cy,R);
+                grad.addColorStop(0, "rgba(230,126,34,.30)");
+                grad.addColorStop(1, "rgba(108,92,231,.25)");
+                ctx.fillStyle = grad;
+                ctx.fill();
+            }
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "rgba(44,62,80,.3)";
+            ctx.stroke();
+        }
+      } else {
+        const s = sweepCCW(a1,a2);
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,R,a1,a1+s,false);
+        ctx.closePath();
+        const grad = ctx.createRadialGradient(cx,cy,0,cx,cy,R);
+        grad.addColorStop(0, "rgba(230,126,34,.20)");
+        grad.addColorStop(1, "rgba(108,92,231,.18)");
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+
+      ctx.beginPath();
+      ctx.arc(cx,cy,R,0,Math.PI*2);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "rgba(44,62,80,.18)";
+      ctx.stroke();
+
+      if (!q || q.mode !== 'slice') {
+        const drawLineR = (q && q.mode === 'measure') ? R + 70 : R;
+        const lw = (q && q.mode === 'measure') ? 3 : 7;
+
+        const p1 = { x: cx + Math.cos(a1)*drawLineR, y: cy + Math.sin(a1)*drawLineR };
+        const p2 = { x: cx + Math.cos(a2)*drawLineR, y: cy + Math.sin(a2)*drawLineR };
+
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.lineTo(p1.x,p1.y);
+        ctx.lineWidth = lw;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "rgba(66,133,244,.90)";
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.lineTo(p2.x,p2.y);
+        ctx.lineWidth = lw;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "rgba(230,126,34,.92)";
+        ctx.stroke();
+      }
+
+      if (!q || q.mode !== 'measure') {
+        ctx.beginPath();
+        ctx.arc(cx,cy,7,0,Math.PI*2);
+        ctx.fillStyle = "rgba(108,92,231,.95)";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(cx,cy,14,0,Math.PI*2);
+        ctx.strokeStyle = "rgba(108,92,231,.22)";
+        ctx.lineWidth = 6;
+        ctx.stroke();
+      }
+
+      if (!isInput) {
+        const p1 = polarToXY(a1);
+        const p2 = polarToXY(a2);
+        const handleSize = 16;
+        const canDragH1 = (currentLevel === 1);
+
+        ctx.beginPath();
+        ctx.arc(p1.x,p1.y,handleSize,0,Math.PI*2);
+        ctx.fillStyle = canDragH1 ? "rgba(66,133,244,.95)" : "rgba(148,163,184,.90)";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(p1.x,p1.y,handleSize+8,0,Math.PI*2);
+        ctx.strokeStyle = canDragH1 ? "rgba(66,133,244,.22)" : "rgba(148,163,184,.20)";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(p2.x,p2.y,handleSize,0,Math.PI*2);
+        ctx.fillStyle = "rgba(230,126,34,.96)";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(p2.x,p2.y,handleSize+8,0,Math.PI*2);
+        ctx.strokeStyle = "rgba(230,126,34,.22)";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+
+        const deg = Math.round(currentSweepDeg());
+        ctx.fillStyle = "rgba(44,62,80,.90)";
+        ctx.font = "900 22px 'Fredoka','Noto Sans TC',sans-serif";
+        ctx.fillText(`${deg}°`, cx - 26, cy + 10);
+
+        ctx.fillStyle = "rgba(100,116,139,.92)";
+        ctx.font = "900 13px 'Noto Sans TC',sans-serif";
+        let label = "圓心角";
+        if(currentLevel === 3 && q && q.p && q.q) label = `目標：${q.p}/${q.q} 圓`;
+        ctx.fillText(label, cx - 42, cy + 34);
+
+        const s = sweepCCW(a1,a2);
+        ctx.beginPath();
+        ctx.arc(cx,cy, 50, a1, a1 + s, false);
+        ctx.lineWidth = 9;
+        ctx.strokeStyle = "rgba(241,196,15,.78)";
+        ctx.lineCap = "round";
+        ctx.stroke();
+      }
+
+      if (q && (q.mode === 'given_deg_ask_frac' || q.mode === 'given_frac_ask_deg')) {
+          const s = sweepCCW(a1,a2);
+          const midAngle = a1 + s / 2;
+          const textX = cx + Math.cos(midAngle) * (R * 0.55);
+          const textY = cy + Math.sin(midAngle) * (R * 0.55);
+          
+          ctx.fillStyle = "#fff";
+          ctx.font = "900 24px 'Noto Sans TC'";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.strokeStyle = "var(--brand-primary)";
+          ctx.lineWidth = 5;
+          
+          const txt = q.mode === 'given_deg_ask_frac' ? `${q.target}°` : `${q.p} / ${q.q} 圓`;
+          ctx.strokeText(txt, textX, textY);
+          ctx.fillText(txt, textX, textY);
+      }
+    }
+
+    function pointerPos(evt, el){
+      const rect = el.getBoundingClientRect();
+      const x = (evt.clientX - rect.left) * (el.width / rect.width);
+      const y = (evt.clientY - rect.top)  * (el.height / rect.height);
+      return {x,y};
+    }
+    function angleFromCenter(x,y){ return Math.atan2(y-cy, x-cx); }
+    function dist2(x1,y1,x2,y2){ return (x1-x2)**2 + (y1-y2)**2; }
+
+    function hitHandle(x,y){
+      const p1 = polarToXY(a1);
+      const p2 = polarToXY(a2);
+      const r = 28;
+
+      const canDragH1 = (currentLevel === 1);
+      if(canDragH1 && dist2(x,y,p1.x,p1.y) <= r*r) return "h1";
+      if(dist2(x,y,p2.x,p2.y) <= r*r) return "h2";
+      return null;
+    }
+
+    function setAngle(which, ang){
+      const snap = diffMeta[currentDiff].snap;
+      let d = rad2deg(ang);
+      d = Math.round(d / snap) * snap;
+      ang = deg2rad(d);
+
+      if(which === 'h1') a1 = ang;
+      else a2 = ang;
+
+      draw();
+
+      if(running && q && q.type !== 'input'){
+        const cur = Math.round(currentSweepDeg());
+        $('#current-deg-val').innerHTML = `${cur}°`;
+      }
+    }
+
+    function toggleWhiteboard() {
+      wbActive = !wbActive;
+      if (wbActive) {
+        wbCanvas.classList.add('active');
+        btnToggleWb.innerHTML = '<i class="fa-solid fa-pen-slash"></i> 關閉計算紙';
+        btnToggleWb.style.background = '#e74c3c';
+        btnToggleWb.style.boxShadow = '0 4px 0 #c0392b';
+      } else {
+        wbCanvas.classList.remove('active');
+        btnToggleWb.innerHTML = '<i class="fa-solid fa-pen"></i> 開啟計算紙';
+        btnToggleWb.style.background = '#1abc9c';
+        btnToggleWb.style.boxShadow = '0 4px 0 #16a085';
+      }
+    }
+    btnToggleWb.addEventListener('click', toggleWhiteboard);
+    btnClearWb.addEventListener('click', () => {
+      wbCtx.clearRect(0,0,W,H);
+    });
+
+    wbCanvas.addEventListener('pointerdown', (evt) => {
+      if(!wbActive) return;
+      isDrawing = true;
+      wbCanvas.setPointerCapture(evt.pointerId);
+      const {x,y} = pointerPos(evt, wbCanvas);
+      lastX = x; lastY = y;
+    });
+    wbCanvas.addEventListener('pointermove', (evt) => {
+      if(!isDrawing || !wbActive) return;
+      const {x,y} = pointerPos(evt, wbCanvas);
+      wbCtx.beginPath();
+      wbCtx.moveTo(lastX, lastY);
+      wbCtx.lineTo(x, y);
+      wbCtx.lineWidth = 3;
+      wbCtx.lineCap = "round";
+      wbCtx.strokeStyle = "var(--brand-purple)"; 
+      wbCtx.stroke();
+      lastX = x; lastY = y;
+    });
+    wbCanvas.addEventListener('pointerup', (evt) => {
+      isDrawing = false;
+      try{ wbCanvas.releasePointerCapture(evt.pointerId); }catch(e){}
+    });
+    wbCanvas.addEventListener('pointercancel', ()=> isDrawing=false);
+
+    canvas.addEventListener('pointerdown', (evt) => {
+      if(!running || paused || wbActive) return;
+
+      canvas.setPointerCapture(evt.pointerId);
+      const {x,y} = pointerPos(evt, canvas);
+
+      if (q && q.mode === 'measure') {
+        dragging = "protractor";
+        dragStartAngle = angleFromCenter(x, y);
+        dragStartProtractorAngle = protractorAngle;
+        return;
+      }
+
+      if (q && q.type === 'input') return;
+
+      const h = hitHandle(x,y);
+      if(h){
+        dragging = h;
+      }else{
+        const ang = angleFromCenter(x,y);
+        const d = Math.hypot(x-cx, y-cy);
+        if(Math.abs(d - R) < 40){
+          dragging = "h2";
+          setAngle("h2", ang);
+        }
+      }
+    });
+
+    canvas.addEventListener('pointermove', (evt) => {
+      if(!running || paused || !dragging || wbActive) return;
+      const {x,y} = pointerPos(evt, canvas);
+
+      if (dragging === "protractor") {
+          const currentAng = angleFromCenter(x, y);
+          const delta = currentAng - dragStartAngle;
+          protractorAngle = dragStartProtractorAngle + delta;
+          draw();
+          return;
+      }
+
+      if (q && q.type === 'input') return;
+
+      setAngle(dragging, angleFromCenter(x,y));
+    });
+
+    canvas.addEventListener('pointerup', (evt) => {
+      dragging = null;
+      try{ canvas.releasePointerCapture(evt.pointerId); }catch(e){}
+    });
+    canvas.addEventListener('pointercancel', ()=> dragging=null);
+
+    function resetAnglesForLevel(level){
+      if(level === 1){ a1 = deg2rad(20); a2 = deg2rad(120); }
+      else { a1 = deg2rad(0); a2 = deg2rad(120); }
+    }
+
+    function getUniqueObj(generatorFunc, maxTries = 15) {
+      for(let i=0; i<maxTries; i++) {
+        let qCandidate = generatorFunc();
+        let key = qCandidate.shortObj + (qCandidate.mode || '');
+        if (!roundHistoryLog.has(key)) {
+            roundHistoryLog.add(key);
+            return qCandidate;
+        }
+      }
+      let qCandidate = generatorFunc();
+      roundHistoryLog.add(qCandidate.shortObj + (qCandidate.mode || ''));
+      return qCandidate;
+    }
+
+    function _genDragQuestionRaw(level){
+      const dm = diffMeta[currentDiff];
+      const nice = (d) => {
+        d = Math.round(d);
+        if(d < 1) d = 1; if(d > 359) d = 359; return d;
+      };
+      
+      if(level === 1){
+        if (Math.random() < 0.4) {
+            const drawAngles = [30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330];
+            const target = pick(drawAngles);
+            return {
+                type: "drag",
+                objective: `畫出指定的角度：<span class="hi">${target}°</span>`,
+                shortObj: `畫出 ${target}°`,
+                target: target, tol: dm.tol, mode: "hit"
+            };
+        }
+
+        const packs = [
+          {name:"微小扇形", min:10,  max:35},
+          {name:"小扇形",   min:20,  max:70},
+          {name:"偏小扇形", min:60,  max:95},
+          {name:"中扇形",   min:90,  max:150},
+          {name:"偏大扇形", min:150, max:210},
+          {name:"半圓附近", min:165, max:195},
+          {name:"大扇形",   min:200, max:300},
+          {name:"超大扇形", min:285, max:340},
+        ];
+        const kind = pick(packs);
+        const style = pick(["nameOnly","rangeOnly","inequality"]);
+        if(style === "rangeOnly"){
+          const lo = kind.min, hi = kind.max;
+          return {
+            type:"drag",
+            objective:`把圓切到 <span class="hi">${lo}°～${hi}°</span>`,
+            shortObj: `${lo}°～${hi}°`,
+            min: lo, max: hi, tol: dm.tol
+          };
+        }
+        if(style === "inequality"){
+          const lo = kind.min, hi = kind.max;
+          const a = pick([`≥ ${lo}° 且 ≤ ${hi}°`, `${lo}° ≤ 角度 ≤ ${hi}°`, `介於 ${lo}° 到 ${hi}° 之間`]);
+          return {
+            type:"drag",
+            objective:`不等式任務：角度要 <span class="hi">${a}</span>`,
+            shortObj: `介於 ${lo}°~${hi}°`,
+            min: lo, max: hi, tol: dm.tol
+          };
+        }
+        return {
+          type:"drag",
+          objective:`把圓切成 <span class="hi">${kind.name}</span>`,
+          shortObj: `${kind.name}`,
+          min: kind.min, max: kind.max, tol: dm.tol
+        };
+      }
+
+      if(level === 2){
+        if (Math.random() < 0.35) {
+            const validAngles = commonAngles.filter(a => a <= 180);
+            const target = pick(validAngles);
+            return {
+                type: "input", ansType: "deg",
+                objective: `請拖曳旋轉量角器，量出這個圓心角的度數`,
+                shortObj: `測量圓心角`,
+                target: target, mode: "measure",
+                drawA1: deg2rad(pick([0, 10, 15, 20, 160, 165, 170, 180, 190, 195, 200, 340, 345, 350])), 
+                drawA2: 0 // Will be calculated dynamically
+            };
+        }
+
+        const mode = pick(["hit","range","complement","delta","multiple"]);
+        const targetBase = pick(commonAngles);
+
+        if(mode === "hit"){
+          return {
+            type:"drag",
+            objective:`命中 <span class="hi">${targetBase}°</span>`,
+            shortObj: `${targetBase}°`,
+            target:targetBase, tol: dm.tol, mode:"hit"
+          };
+        }
+        if(mode === "range"){
+          const baseW = pick([10,12,15,18,20,24]);
+          const shrink = currentDiff === "hard" ? 0.7 : currentDiff === "normal" ? 0.85 : 1.0;
+          const w = Math.max(6, Math.round(baseW * shrink));
+          let lo = clamp(targetBase - w, 5, 355);
+          let hi = clamp(targetBase + w, 5, 355);
+          if(lo > hi) [lo,hi]=[hi,lo];
+          return {
+            type:"drag",
+            objective:`切到 <span class="hi">${lo}°～${hi}°</span>`,
+            shortObj: `${lo}°～${hi}°`,
+            min:lo, max:hi, tol: dm.tol, mode:"range"
+          };
+        }
+        if(mode === "complement"){
+          const need = pick([20,30,36,45,60,72,75,90,108,120,135,150,180,210,240,270]);
+          const t = 360 - need;
+          const phr = pick([
+            `補角任務：還差 <span class="hi">${need}°</span>`,
+            `缺口任務：留給外圈的角度是 <span class="hi">${need}°</span>`,
+            `整圈 360°：外面剩下 <span class="hi">${need}°</span>`
+          ]);
+          return {
+            type:"drag", objective: phr, shortObj: `補角 ${need}°`,
+            target:t, tol: dm.tol, mode:"complement"
+          };
+        }
+        if(mode === "delta"){
+          const delta = pick([10,15,20,25,30,35,40,45]);
+          const dir = pick(["more","less"]);
+          let target = dir === "more" ? targetBase + delta : targetBase - delta;
+          target = nice(clamp(target, 5, 355));
+          const text = dir === "more" ? `比 <span class="hi">${targetBase}°</span> 多 <span class="hi">${delta}°</span>` : `比 <span class="hi">${targetBase}°</span> 少 <span class="hi">${delta}°</span>`;
+          return {
+            type:"drag", objective:`差值任務：${text}`, shortObj: `差值計算`,
+            target, tol: dm.tol, mode:"hit"
+          };
+        }
+        if(mode === "multiple"){
+          const base = pick([15,18,20,24,25,30,36,40,45,60,72,75,90]);
+          const mul = pick([2,3,4]);
+          let target = base * mul;
+          if(target >= 355) target = 360 - (target % 360);
+          target = nice(clamp(target, 5, 355));
+          return {
+            type:"drag", objective:`倍數任務：<span class="hi">${mul}</span> 倍的 <span class="hi">${base}°</span>`, shortObj: `${mul}倍的${base}°`,
+            target, tol: dm.tol, mode:"hit"
+          };
+        }
+      }
+
+      const r3 = Math.random();
+      if (r3 < 0.20) { 
+          const [p, qv] = pick(fracPool);
+          return {
+              type: "input", ansType: "frac",
+              objective: `這個圖形被平分成 ${qv} 份，灰色部分是幾分之幾圓？`,
+              shortObj: `看圖填分數`,
+              p, q: qv, mode: "slice"
+          };
+      } else if (r3 < 0.40) { 
+          const [p, qv] = pick(fracPool);
+          const target = 360 * (p/qv);
+          return {
+              type: "input", ansType: "frac",
+              objective: `圓心角是 <span class="hi">${target}°</span>，這是幾分之幾圓？`,
+              shortObj: `角度轉分數`,
+              p, q: qv, target, mode: "given_deg_ask_frac",
+              drawA1: 0, drawA2: deg2rad(target)
+          };
+      } else if (r3 < 0.60) { 
+          const [p, qv] = pick(fracPool);
+          const target = 360 * (p/qv);
+          return {
+              type: "input", ansType: "deg",
+              objective: `這個扇形是 <span class="hi">${p} / ${qv} 圓</span>，圓心角是幾度？`,
+              shortObj: `分數轉角度`,
+              p, q: qv, target, mode: "given_frac_ask_deg",
+              drawA1: 0, drawA2: deg2rad(target)
+          };
+      } else if (r3 < 0.80) { 
+          const variant = pick(["fraction","share","steps"]);
+          const [p,qv] = pick(fracPool);
+          const target = 360*(p/qv);
+
+          if(variant === "share"){
+            return {
+              type:"drag", objective:`把圓平均分成 <span class="hi">${qv}</span> 份，取其中 <span class="hi">${p}</span> 份`, shortObj: `${p}/${qv} 圓拖曳`,
+              p, q:qv, target, tol: dm.tol
+            };
+          }
+          if(variant === "steps"){
+            const story = pick([
+              `把 1 圓拆成 <span class="hi">${qv}</span> 格，走 <span class="hi">${p}</span> 格`,
+              `把披薩切 <span class="hi">${qv}</span> 片，拿走 <span class="hi">${p}</span> 片`,
+              `圓形地圖 <span class="hi">${qv}</span> 段，走 <span class="hi">${p}</span> 段`
+            ]);
+            return {
+              type:"drag", objective: story, shortObj: `${p}/${qv} 圓拖曳`,
+              p, q:qv, target, tol: dm.tol
+            };
+          }
+          return {
+            type:"drag", objective:`切出 <span class="hi">${p}/${qv}</span> 圓`, shortObj: `${p}/${qv} 圓拖曳`,
+            p, q:qv, target, tol: dm.tol
+          };
+      } else {
+          const pool_180 = fracPool.filter(([p, qv]) => 360 * p / qv <= 180);
+          const [p, qv] = pick(pool_180);
+          const target = 360 * (p/qv);
+          return {
+              type: "input", ansType: "frac",
+              objective: `請拖曳旋轉量角器，量出圓心角後，算出它是幾分之幾圓？`,
+              shortObj: `量角轉分數`,
+              p, q: qv, target, mode: "measure",
+              drawA1: deg2rad(pick([0, 10, 15, 20, 160, 165, 170, 180, 190, 195, 200, 340, 345, 350])),
+              drawA2: 0 // Will be set in nextQuestion
+          };
+      }
+    }
+
+    function nextQuestion(){
+      if(!running) return;
+      resetAnglesForLevel(currentLevel);
+      
+      q = getUniqueObj(() => _genDragQuestionRaw(currentLevel));
+
+      if (q.type === 'input') {
+          $('#input-zone').classList.remove('hidden');
+          
+          if (q.ansType === 'deg') {
+              $('#input-deg-wrap').classList.remove('hidden');
+              $('#input-frac-wrap').classList.add('hidden');
+              $('#input-deg').value = '';
+              setTimeout(() => $('#input-deg').focus(), 100);
+          } else {
+              $('#input-deg-wrap').classList.add('hidden');
+              $('#input-frac-wrap').classList.remove('hidden');
+              $('#input-frac-p').value = '';
+              $('#input-frac-q').value = '';
+              setTimeout(() => $('#input-frac-p').focus(), 100);
+          }
+          
+          if (q.drawA1 !== undefined) a1 = q.drawA1;
+          if (q.drawA2 !== undefined) {
+              a2 = q.drawA2 !== 0 ? q.drawA2 : a1 + deg2rad(q.target);
+          }
+
+          if (q.mode === 'measure') {
+              protractorAngle = Math.PI;
+          }
+
+          $('#current-deg-display').classList.add('hidden');
+      } else {
+          $('#input-zone').classList.add('hidden');
+          $('#current-deg-display').classList.remove('hidden');
+          const cur = Math.round(currentSweepDeg());
+          $('#current-deg-val').innerHTML = `${cur}°`;
+      }
+      
+      const tol = diffMeta[currentDiff].tol;
+      let tolBadge = q.type === 'drag' ? `<span style="display:inline-block; margin-left:8px; font-size:0.85rem; color:#e67e22; background:rgba(230,126,34,0.1); padding:3px 10px; border-radius:12px; font-weight:900;">容錯：±${tol}°</span>` : '';
+      
+      qTitle.innerHTML = `${levelMeta[currentLevel].name}｜目標：${q.objective} ${tolBadge}`;
+      qObjective.innerHTML = '';
+      qObjective.style.display = 'none';
+
+      draw();
+    }
+
+    function addTime(sec){
+      timeLeft = clamp(timeLeft + sec, 0, 999); 
+      timeDisp.textContent = timeLeft;
+    }
+    function comboMul(){
+      if(combo >= 9) return 1.6;
+      if(combo >= 6) return 1.4;
+      if(combo >= 3) return 1.2;
+      return 1.0;
+    }
+    function scoreAdd(base){ return Math.round(base * comboMul()); }
+
+    function updateComboUI(){
+      comboDisp.textContent = combo;
+      if(combo >= 3){
+        comboBox.textContent = `COMBO x${combo}`;
+        comboBox.classList.add('combo-active');
+      }else{
+        comboBox.classList.remove('combo-active');
+      }
+    }
+
+    function syncHUD(){
+      timeDisp.textContent = timeLeft;
+      scoreDisp.textContent = score;
+      updateComboUI();
+      timeDisp.classList.toggle('urgent', timeLeft <= 10);
+    }
+
+    const teacherPopup = $('#teacher-popup');
+    const teacherBubbleText = $('#teacher-bubble-text');
+    const teacherImg = $('#teacher-img');
+    const goodMsgs = ["太棒了！繼續保持！", "你超會！完美！", "精準命中！", "不錯唷！老師為你驕傲！", "太厲害啦！這題也難不倒你！"];
+    const badMsgs = ["沒關係，再想一下！", "差一點點，加油！", "慢慢來，看準再下手！", "別灰心，數學就是越錯越懂！", "這題小有挑戰，再試一次！"];
+    let popupTimeout;
+
+    function showTeacherPopup(isCorrect, detailMsg) {
+      clearTimeout(popupTimeout);
+      
+      const isLeft = Math.random() > 0.5;
+      teacherPopup.className = `teacher-popup ${isLeft ? 'left-side' : 'right-side'}`;
+      
+      if(isLeft) {
+        teacherImg.src = "jessie.png";
+      } else {
+        teacherImg.src = "JESSIEMATH-Q.png";
+      }
+
+      const mainSaying = isCorrect ? pick(goodMsgs) : pick(badMsgs);
+      teacherBubbleText.innerHTML = `${mainSaying}<br><span style="font-size:0.95rem; color:#555; font-weight:800;">${detailMsg}</span>`;
+      
+      teacherPopup.classList.add('show');
+
+      popupTimeout = setTimeout(() => {
+        teacherPopup.classList.remove('show');
+      }, 3500);
+    }
+
+    function submitDrag(){
+      if(!running || paused || !q) return;
+
+      const dm = diffMeta[currentDiff];
+      let ok = false;
+      let msg = "";
+      let playerAnsText = "";
+      roundTotalQ++; 
+
+      if (q.type === 'input') {
+          if (q.ansType === 'deg') {
+              let ans = parseInt($('#input-deg').value);
+              playerAnsText = isNaN(ans) ? "未作答" : `${ans}°`;
+              
+              let isCorrect = false;
+              if (q.mode === 'measure') {
+                  isCorrect = (!isNaN(ans) && Math.abs(ans - q.target) <= 1);
+              } else {
+                  isCorrect = (ans === q.target);
+              }
+
+              if (isCorrect) {
+                  ok = true; msg = `✅ 角度測量正確`;
+              } else {
+                  ok = false; msg = `❌ 答案應該是 ${q.target}°`;
+              }
+          } else if (q.ansType === 'frac') {
+              let p_ans = parseInt($('#input-frac-p').value);
+              let q_ans = parseInt($('#input-frac-q').value);
+              playerAnsText = (isNaN(p_ans) || isNaN(q_ans)) ? "未作答" : `${p_ans}/${q_ans} 圓`;
+              
+              if (!isNaN(p_ans) && !isNaN(q_ans) && q_ans !== 0 && (p_ans * q.q === q_ans * q.p)) {
+                  ok = true; msg = `✅ 分數推理正確`;
+              } else {
+                  ok = false; msg = `❌ 答案應該是 ${q.p}/${q.q} 圓`;
+              }
+          }
+      } else {
+          const deg = currentSweepDeg();
+          playerAnsText = `${Math.round(deg)}°`;
+
+          if(currentLevel === 1){
+            ok = (deg >= q.min - dm.tol && deg <= q.max + dm.tol);
+            msg = ok ? `✅ 掌握得很好` : `❌ 落在 ${Math.round(deg)}°`;
+            if (q.target) { 
+               const diff = Math.abs(deg - q.target);
+               ok = diff <= dm.tol;
+               msg = ok ? `✅ 角度完美` : `❌ 差了 ${Math.round(diff)}°`;
+            }
+          }else if(currentLevel === 2){
+            if(q.mode === 'range'){
+              ok = (deg >= q.min - dm.tol && deg <= q.max + dm.tol);
+              msg = ok ? `✅ 穩穩送進範圍` : `❌ 目前 ${Math.round(deg)}°`;
+            }else{
+              const diff = Math.abs(deg - q.target);
+              ok = diff <= dm.tol;
+              msg = ok ? `✅ 完美切出` : `❌ 差了 ${Math.round(diff)}°`;
+            }
+          }else{
+            const diff = Math.abs(deg - q.target);
+            ok = diff <= dm.tol;
+            msg = ok ? `✅ 比例感很到位` : `❌ 差了 ${Math.round(diff)}°`;
+          }
+      }
+
+      roundHistory.push({
+        shortObj: q.shortObj,
+        playerDeg: playerAnsText, 
+        ok: ok,
+        msg: msg.split('！')[1] || msg 
+      });
+
+      if(ok){
+        roundCorrectQ++;
+        combo++;
+        addTime(+5);
+        const gain = scoreAdd(dm.scoreBase + (currentLevel-1)*2);
+        score += gain;
+        showTeacherPopup(ok, `${msg} (＋5 秒｜＋${gain} 分)`);
+      }else{
+        combo = 0;
+        addTime(-5);
+        showTeacherPopup(ok, `${msg} (－5 秒)`);
+      }
+
+      syncHUD();
+      wbCtx.clearRect(0,0,W,H); 
+      setTimeout(nextQuestion, 650);
+    }
+
+    function showScreen(id){
+      [screenStart, screenSelect, screenPause, screenEnd].forEach(el => el.classList.add('hidden'));
+      if(id) {
+        $(id).classList.remove('hidden');
+        if(id !== '#screen-pause') {
+           gameUI.classList.add('hidden');
+        } else {
+           gameUI.classList.remove('hidden');
+        }
+      } else {
+        gameUI.classList.remove('hidden');
+      }
+    }
+
+    function setDiff(diff){
+      currentDiff = diff;
+      const m = diffMeta[diff];
+      chipDiff.innerHTML = `<i class="fa-solid fa-gauge-high"></i> ${m.name}`;
+      diffDesc.innerHTML = `目前：<b style="color:var(--brand-purple)">${m.name}</b>｜時間 <b>${m.time}秒</b>｜容錯 <b>±${m.tol}°</b>｜角度吸附約 <b>${m.snap}°</b> 一格。`;
+
+      $$('#screen-select [data-diff]').forEach(b=>{
+        const on = b.dataset.diff === diff;
+        b.style.borderColor = on ? "rgba(108,92,231,.35)" : "#dadce0";
+        b.style.background = on ? "rgba(108,92,231,.06)" : "#fff";
+        b.style.color = on ? "var(--brand-purple)" : "#5f6368";
+      });
+
+      $('#btn-start').innerHTML = `開始本局（${m.time} 秒） <i class="fa-solid fa-play"></i>`;
+    }
+
+    function setLevel(level){
+      currentLevel = level;
+      chipLevel.innerHTML = `<i class="fa-solid fa-layer-group"></i> Lv ${level}`;
+
+      $$('#screen-select [data-level]').forEach((b) => {
+        const on = Number(b.dataset.level) === level;
+        b.style.filter = on ? "brightness(1.03)" : "none";
+        b.style.transform = on ? "translateY(-1px)" : "none";
+      });
+    }
+
+    function startRound(){
+      running = true;
+      paused = false;
+      timeLeft = diffMeta[currentDiff].time;
+      score = 0;
+      combo = 0;
+      roundTotalQ = 0;
+      roundCorrectQ = 0;
+      roundHistory = [];
+      roundHistoryLog.clear(); 
+      wbCtx.clearRect(0,0,W,H); 
+
+      btnPause.classList.remove('hidden');
+      btnPause.innerHTML = '<i class="fa-solid fa-pause"></i>';
+
+      syncHUD();
+
+      if(tickTimer) clearInterval(tickTimer);
+      tickTimer = setInterval(() => {
+        if(!running || paused) return;
+        timeLeft -= 1;
+        if(timeLeft <= 0){
+          timeLeft = 0;
+          syncHUD();
+          endRound();
+        }else{
+          syncHUD();
+        }
+      }, 1000);
+
+      resetAnglesForLevel(currentLevel);
+      nextQuestion();
+    }
+
+    function endRound(){
+      running = false;
+      paused = false;
+      if(tickTimer) clearInterval(tickTimer);
+      tickTimer = null;
+      wbActive = false; 
+      wbCanvas.classList.remove('active');
+
+      btnPause.classList.add('hidden');
+      teacherPopup.classList.remove('show'); 
+
+      const stars = starFor(currentLevel, currentDiff, score);
+      const starText = '★'.repeat(stars) + '☆'.repeat(3-stars);
+
+      finalScore.textContent = score;
+      finalStars.textContent = starText;
+
+      $('#review-score').textContent = score;
+      $('#review-correct').textContent = roundCorrectQ;
+      $('#review-total1').textContent = roundTotalQ;
+      $('#review-wrong').textContent = roundTotalQ - roundCorrectQ;
+      $('#review-total2').textContent = roundTotalQ;
+
+      let rHtml = '';
+      if(roundHistory.length === 0){
+        rHtml = '<div style="text-align:center; padding:10px; color:#999;">這局沒有留下紀錄喔！</div>';
+      }else{
+        roundHistory.forEach((h, i) => {
+          const icon = h.ok ? '✅' : '❌';
+          const cName = h.ok ? 'r-correct' : 'r-wrong';
+          rHtml += `<div class="review-item">
+            ${icon} <span style="display:inline-block; width:120px;">目標：${h.shortObj}</span> | 
+            答題：<span class="${cName}">${h.playerDeg}</span> | ${h.msg}
+          </div>`;
+        });
+      }
+      $('#review-list').innerHTML = rHtml;
+
+      pushBoard({ 
+        name: playerName, 
+        levelName: levelMeta[currentLevel].name,
+        diffName: diffMeta[currentDiff].name,
+        score: score, 
+        correct: roundCorrectQ,
+        total: roundTotalQ,
+        stars: stars, 
+        date: nowLocalTime() 
+      });
+      
+      renderBoard(rankEnd);
+      showScreen('#screen-end');
+    }
+
+    function togglePause(){
+      if(!running) return;
+      paused = !paused;
+      showScreen(paused ? '#screen-pause' : null);
+      btnPause.innerHTML = paused ? '<i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-pause"></i>';
+    }
+
+    function restartRound(){
+      showScreen(null);
+      startRound();
+    }
+
+    function backToSelect(){
+      running = false;
+      paused = false;
+      if(tickTimer) clearInterval(tickTimer);
+      tickTimer = null;
+      btnPause.classList.add('hidden');
+      showScreen('#screen-select');
+    }
+
+    btnNext.addEventListener('click', () => {
+      const name = playerNameInput.value.trim();
+      if(!name){ alert('請輸入名字！'); return; }
+      playerName = name;
+      displayName.textContent = name;
+      showScreen('#screen-select');
+    });
+
+    $$('#screen-select [data-level]').forEach(b=>{
+      b.addEventListener('click', ()=> setLevel(Number(b.dataset.level)));
+    });
+    $$('#screen-select [data-diff]').forEach(b=>{
+      b.addEventListener('click', ()=> setDiff(b.dataset.diff));
+    });
+
+    btnStart.addEventListener('click', () => { showScreen(null); startRound(); });
+
+    btnPause.addEventListener('click', togglePause);
+    btnResume.addEventListener('click', () => { showScreen(null); togglePause(); });
+    btnRestartPause.addEventListener('click', restartRound);
+    btnBackPause.addEventListener('click', backToSelect);
+
+    btnPlayAgain.addEventListener('click', () => { showScreen(null); startRound(); });
+    btnBack2.addEventListener('click', backToSelect);
+
+    btnSubmit.addEventListener('click', submitDrag);
+
+    btnRestartInline.addEventListener('click', () => {
+      if(!running){ showScreen(null); startRound(); }
+      else restartRound();
+    });
+    btnBackInline.addEventListener('click', backToSelect);
+
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' && running && !paused) submitDrag();
+      if(e.key === ' ' && running && q && q.type !== 'input'){
+        e.preventDefault();
+        togglePause();
+      }
+      if(e.key === 'Escape'){
+        if(!screenPause.classList.contains('hidden')) togglePause();
+      }
+    });
+
+    setLevel(1);
+    setDiff('easy');
+    resetAnglesForLevel(1);
+    draw();
+    renderBoard(rankStart); 
+    
+    showScreen('#screen-start');
+  })();
+  </script>
+</body>
+</html>
